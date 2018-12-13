@@ -1,6 +1,5 @@
-package server;
+package controller.server;
 
-import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -9,7 +8,7 @@ import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
 
-import thread.ServerThread;
+import controller.thread.ServerThread;
 
 public class Server {
 

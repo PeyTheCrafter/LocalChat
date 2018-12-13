@@ -1,9 +1,9 @@
-package netScan.scanner;
+package controller.netScan.scanner;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import netScan.thread.ServerScanThread;
+import controller.netScan.thread.ServerScanThread;
 
 public class ServerScanner {
 	private String subnet;

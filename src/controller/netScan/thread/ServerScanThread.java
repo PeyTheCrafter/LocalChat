@@ -1,6 +1,6 @@
-package netScan.thread;
+package controller.netScan.thread;
 
-import netScan.scanner.*;
+import controller.netScan.scanner.*;
 
 public class ServerScanThread extends Thread {
 	private ServerScanner ss;

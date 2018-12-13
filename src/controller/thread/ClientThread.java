@@ -1,4 +1,4 @@
-package thread;
+package controller.thread;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

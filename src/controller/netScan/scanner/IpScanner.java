@@ -1,4 +1,4 @@
-package netScan.scanner;
+package controller.netScan.scanner;
 
 import java.io.IOException;
 import java.net.InetAddress;
