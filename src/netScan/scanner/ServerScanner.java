@@ -3,7 +3,6 @@ package netScan.scanner;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import netScan.thread.ScanThread;
 import netScan.thread.ServerScanThread;
 
 public class ServerScanner {
