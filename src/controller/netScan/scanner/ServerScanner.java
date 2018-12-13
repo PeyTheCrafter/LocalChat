@@ -16,11 +16,6 @@ public class ServerScanner {
 		this.timeout = timeout;
 	}
 	
-	public static void main(String[] args) {
-		ServerScanner ss = new ServerScanner("192.168.1", 6544, 50);
-		//ss.scan(24);
-	}
-	
 	/**
 	 * Scans the network using threads.
 	 * 
@@ -62,7 +57,6 @@ public class ServerScanner {
 			s.close();
 			return true;
 		} catch (Exception e) {
-			// System.out.println("No server.");
 			return false;
 		}
 	}
