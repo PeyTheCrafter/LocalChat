@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -17,14 +18,14 @@ public class Server {
 
 	public static void main(String[] args) {
 		System.out.println("Port: ");
-		new Server(new Scanner(System.in).nextInt()).createServer();
+		new Server(new Scanner(System.in).nextInt()).start();
 	}
 	
 	public Server(int port) {
 		this.port = port;
 	}
 
-	public void createServer() {
+	public void start() {
 		this.logInfo("Starting server...");
 		try {
 			this.logInfo("Attempting to start server on port " + this.port);

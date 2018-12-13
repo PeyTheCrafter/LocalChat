@@ -40,7 +40,8 @@ public class ClientThread implements Runnable {
 				System.out.println(message);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Communication lost.");
 		}
 	}
 
