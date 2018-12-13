@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import CLI.CLI;
 import controller.netScan.scanner.ServerScanner;
 import controller.thread.ClientThread;
 
@@ -17,31 +18,7 @@ public class Client {
 	private String username;
 
 	public static void main(String[] args) {
-		System.out.println("Scan servers? (y/n)");
-		String response = new Scanner(System.in).nextLine();
-		if(response.equals("y")) {
-			System.out.println("Port: ");
-			int scanPort = new Scanner(System.in).nextInt();
-			try {
-				String address;
-				address = InetAddress.getLocalHost().getHostAddress();
-				System.out.println(address.substring(0, address.lastIndexOf(".")));
-				ServerScanner ss = new ServerScanner(address.substring(0, address.lastIndexOf(".")), scanPort, 50);
-				ss.scan(24);
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		System.out.println("IP: ");
-		String ip = new Scanner(System.in).nextLine();
-		System.out.println("Port: ");
-		int port = new Scanner(System.in).nextInt();
-		System.out.println("Username: ");
-		String username = new Scanner(System.in).nextLine();
-		Client client = new Client(ip, port, username);
-		client.createClient();
+		new CLI().client();
 	}
 
 	public Client(String ip, int port, String username) {

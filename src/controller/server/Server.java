@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
 
+import CLI.CLI;
 import controller.thread.ServerThread;
 
 public class Server {
@@ -16,8 +17,7 @@ public class Server {
 	private int port;
 
 	public static void main(String[] args) {
-		System.out.println("Port: ");
-		new Server(new Scanner(System.in).nextInt()).start();
+		new CLI().server();
 	}
 	
 	public Server(int port) {
