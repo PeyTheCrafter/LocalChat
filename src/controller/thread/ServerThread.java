@@ -50,6 +50,9 @@ public class ServerThread implements Runnable, ListDataListener {
 	
 	private void disconnect() {
 		System.out.println("User disconnected.");
+		synchronized (this.conversation) {			
+			this.sendMessage("User disconnected.");
+		}
 		try {
 			this.socket.close();
 		} catch (IOException e) {
@@ -69,7 +72,7 @@ public class ServerThread implements Runnable, ListDataListener {
 		try {
 			this.dos.writeUTF(message);
 		} catch (Exception e1) {
-			//e1.printStackTrace(); ERROR LINEA 70
+			//e1.printStackTrace(); ERROR LINEA 71
 		}
 	}
 

@@ -1,13 +1,9 @@
 package controller.client;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-
 import CLI.CLI;
-import controller.netScan.scanner.ServerScanner;
 import controller.thread.ClientThread;
 
 public class Client {
