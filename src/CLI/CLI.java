@@ -1,11 +1,14 @@
 package CLI;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.client.Client;
 import controller.netScan.scanner.ServerScanner;
 import controller.server.Server;
+import model.ServerData;
 
 public class CLI {
 	public CLI() {
@@ -23,7 +26,7 @@ public class CLI {
 			try {
 				String address = InetAddress.getLocalHost().getHostAddress();
 				ServerScanner ss = new ServerScanner(address.substring(0, address.lastIndexOf(".")), scanPort, 50);
-				ss.scan(threads);
+				ss.scan();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -37,9 +40,10 @@ public class CLI {
 		Client client = new Client(ip, port, username);
 		client.createClient();
 	}
-	
+
 	public void server() {
 		System.out.println("Port: ");
 		new Server(new Scanner(System.in).nextInt()).start();
 	}
+
 }

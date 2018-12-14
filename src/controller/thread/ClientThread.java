@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
+import controller.Controller;
 import model.Message;
 
 public class ClientThread implements Runnable {
+	
 	private DataInputStream dis;
 	private DataOutputStream dos;
 	private ObjectInputStream ois;
@@ -24,20 +25,21 @@ public class ClientThread implements Runnable {
 		try {
 			this.dis = new DataInputStream(this.socket.getInputStream());
 			this.dos = new DataOutputStream(this.socket.getOutputStream());
+			/*this.ois = new ObjectInputStream(this.socket.getInputStream());
+			this.oos = new ObjectOutputStream(this.socket.getOutputStream());*/
+			Thread thread = new Thread(this);
+			thread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Thread thread = new Thread(this);
-		thread.start();
-		this.listener();
 	}
 
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				String message = this.dis.readUTF();
-				System.out.println(message);
+				Message message = new Message(this.dis.readUTF());
+				Controller.getInstance().showMessage(message);
 			}
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -45,17 +47,9 @@ public class ClientThread implements Runnable {
 		}
 	}
 
-	public void listener() {
-		this.sendMessage(this.username + " joined.");
-		while (true) {
-			String message = new Scanner(System.in).nextLine();
-			this.sendMessage(message);
-		}
-	}
-
-	private void sendMessage(String msg) {
+	public void sendMessage(Message message) {
 		try {
-			this.dos.writeUTF(this.formatUsername() + msg);
+			this.dos.writeUTF(message.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,4 +58,8 @@ public class ClientThread implements Runnable {
 	private String formatUsername() {
 		return "[" + this.username + "]: ";
 	}
+	
+	/*public void deleteClient() {
+		this.thread.interrupt();
+	}*/
 }
