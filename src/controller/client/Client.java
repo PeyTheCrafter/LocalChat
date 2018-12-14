@@ -3,7 +3,6 @@ package controller.client;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import controller.thread.ClientThread;
 import model.Message;
 import model.ServerData;
