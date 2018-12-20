@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import controller.commander.Commander;
 import model.Message;
 
 public class ServerThread implements Runnable, ListDataListener {
@@ -20,10 +21,12 @@ public class ServerThread implements Runnable, ListDataListener {
 	private Socket socket;
 	private DataInputStream dis;
 	private DataOutputStream dos;
+	private Commander commander;
 
 	public ServerThread(DefaultListModel<String> conversation, Socket client) {
 		this.conversation = conversation;
 		this.socket = client;
+		this.commander = new Commander();
 		try {
 			this.dis = new DataInputStream(this.socket.getInputStream());
 			this.dos = new DataOutputStream(this.socket.getOutputStream());
@@ -38,6 +41,7 @@ public class ServerThread implements Runnable, ListDataListener {
 		try {
 			while (true) {
 				String message = this.dis.readUTF();
+				this.commander.ckechCommand(message);
 				synchronized (this.conversation) {
 					this.sendMessage(message);
 				}
@@ -50,9 +54,6 @@ public class ServerThread implements Runnable, ListDataListener {
 	
 	private void disconnect() {
 		System.out.println("User disconnected.");
-		synchronized (this.conversation) {			
-			this.sendMessage("User disconnected.");
-		}
 		try {
 			this.socket.close();
 		} catch (IOException e) {
@@ -72,7 +73,7 @@ public class ServerThread implements Runnable, ListDataListener {
 		try {
 			this.dos.writeUTF(message);
 		} catch (Exception e1) {
-			//e1.printStackTrace(); ERROR LINEA 71
+			//e1.printStackTrace(); ERROR LINEA 70
 		}
 	}
 

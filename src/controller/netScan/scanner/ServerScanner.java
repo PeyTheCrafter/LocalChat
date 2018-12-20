@@ -1,33 +1,19 @@
 package controller.netScan.scanner;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 import controller.netScan.thread.ServerScanThread;
-import model.ServerData;
 
 public class ServerScanner {
-	
 	private String subnet;
 	private int port;
 	private int timeout;
-	private ArrayList<ServerData> serversFound;
 
 	public ServerScanner(String subnet, int port, int timeout) {
 		this.subnet = subnet;
 		this.port = port;
 		this.timeout = timeout;
-		this.serversFound = new ArrayList<>();
-	}
-	
-	public ServerScanner() {
-		extractIP();
-		this.port = 6544;
-		this.timeout = 50;
-		this.serversFound = new ArrayList<>();
 	}
 	
 	/**
@@ -37,13 +23,13 @@ public class ServerScanner {
 	 *            the number of threads to create.
 	 * @throws InterruptedException 
 	 */
-	public ArrayList<ServerData> scan() throws InterruptedException {
+	public void scan(int threads) throws InterruptedException {
 		final int ips = 254;
-		int ipt = ips / 10;
-		System.out.println("Scanning network with " + 10 + " threads. (" + ipt + " ip(s) per thread).");
-		
+		int ipt = ips / threads;
+		System.out.println("Scanning network with " + threads + " threads. (" + ipt + " ip(s) per thread).");
+
 		int current = 0;
-		this.serversFound.addAll(new ServerScanThread(this, current, current + ipt).scan());
+		new ServerScanThread(this, current, current + ipt).start();
 		current += ipt;
 		while (current < ips) {
 			int start = current + 1;
@@ -52,10 +38,9 @@ public class ServerScanner {
 				current = ips;
 			}
 			int stop = current;
-			this.serversFound.addAll(new ServerScanThread(this, start, stop).scan());
+			new ServerScanThread(this, start, stop).start();
+			// System.out.println(start + " - " + stop);
 		}
-		
-		return this.serversFound;
 	}
 
 	/**
@@ -73,15 +58,6 @@ public class ServerScanner {
 			return true;
 		} catch (Exception e) {
 			return false;
-		}
-	}
-	
-	private void extractIP() {
-		try {
-			String subnet = InetAddress.getLocalHost().getHostAddress();
-			this.subnet = subnet.substring(0, subnet.lastIndexOf("."));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		}
 	}
 
