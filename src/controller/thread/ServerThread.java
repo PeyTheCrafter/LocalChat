@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -26,7 +28,7 @@ public class ServerThread implements Runnable, ListDataListener {
 	public ServerThread(DefaultListModel<String> conversation, Socket client) {
 		this.conversation = conversation;
 		this.socket = client;
-		this.commander = new Commander();
+		this.commander = new Commander("/");
 		try {
 			this.dis = new DataInputStream(this.socket.getInputStream());
 			this.dos = new DataOutputStream(this.socket.getOutputStream());
@@ -41,9 +43,13 @@ public class ServerThread implements Runnable, ListDataListener {
 		try {
 			while (true) {
 				String message = this.dis.readUTF();
-				this.commander.ckechCommand(message);
-				synchronized (this.conversation) {
-					this.sendMessage(message);
+				System.out.println(this.commander.ckechCommand(message));
+				if (!this.commander.ckechCommand(message)) {
+					synchronized (this.conversation) {
+						this.sendMessage(message);
+					}
+				} else {
+					this.executeCommand(this.commander.getExecution(message));
 				}
 			}
 		} catch (IOException e) {
@@ -51,7 +57,26 @@ public class ServerThread implements Runnable, ListDataListener {
 			this.disconnect();
 		}
 	}
-	
+
+	private void executeCommand(String command) {
+		try {
+			Method method = this.getClass().getMethod(command, null);
+			method.invoke(this, null);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private void disconnect() {
 		System.out.println("User disconnected.");
 		try {
@@ -73,7 +98,6 @@ public class ServerThread implements Runnable, ListDataListener {
 		try {
 			this.dos.writeUTF(message);
 		} catch (Exception e1) {
-			//e1.printStackTrace(); ERROR LINEA 70
 		}
 	}
 

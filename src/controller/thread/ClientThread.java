@@ -46,10 +46,18 @@ public class ClientThread implements Runnable {
 	}
 
 	public void listener() {
-		this.sendMessage(this.username + " joined.");
+		this.sendAlert(this.username + " joined.");
 		while (true) {
 			String message = new Scanner(System.in).nextLine();
 			this.sendMessage(message);
+		}
+	}
+	
+	private void sendAlert(String msg) {
+		try {
+			this.dos.writeUTF(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
